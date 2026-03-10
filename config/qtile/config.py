@@ -25,8 +25,7 @@ keys = [
 
     # Move windows up or down in current stack
     Key([mod,"shift", "control"], "k", lazy.layout.shuffle_down()),
-    Key([mod,"shift", "control"], "j", lazy.layout.shuffle_up()),
-    Key([mod,"shift", "control"], "h", lazy.layout.shuffle_left()),
+    Key([mod,"shift", "control"], "j", lazy.layout.shuffle_up()), Key([mod,"shift", "control"], "h", lazy.layout.shuffle_left()),
     Key([mod,"shift", "control"], "l", lazy.layout.shuffle_right()),
 
     Key([mod], "n", lazy.layout.swap_column_left()), 
@@ -100,7 +99,7 @@ def window_to_next_screen(qtile, switch_group=False, switch_screen=False):
 def set_pavucontrol_floating(window):
     if "pavucontrol" in window.window.get_wm_class():
         window.floating = True
-        window.set_position_floating(2130,50)
+        window.set_position_floating(1130,50)
         window.set_size_floating(400,500)
 
 # TODO fix MUS layout && add music station there
@@ -109,7 +108,6 @@ group_names = [
     ("DEV", {'layout': 'columns'}),
     ("SYS", {'layout': 'columns'}),
     ("CHAT", {'layout': 'columns'}),
-    ("VBOX", {'layout': 'columns'}),
     ("MUS", {'layout': 'floating'}),
     ("VID", {'layout': 'columns'}),
 ]
@@ -159,28 +157,19 @@ extension_widget_defaults = dict(
 )
 
 layouts = [
-    layout.MonadTall(
-        #border_focus = colors[17],
-        border_normal = colors[1],
+    layout.Columns(
+        border_focus=colors[17],
         border_width=3,
-        margin=15,
-        border_on_single=True,
-        margin_on_single=30,
+        margin=7
+    ),
+    layout.Max(),
+    layout.MonadThreeCol(
+        border_focus=colors[17],
+        margin=15
     ),
     layout.Floating(
         border_focus = colors[17],
         border_normal = colors[14],
-    ),
-    layout.Columns(
-        #border_focus=colors[17],
-        margin=15
-    ),
-    layout.Max(),
-    layout.Spiral(
-        margin=15
-    ),
-    layout.MonadThreeCol(
-        margin=15
     ),
 ]
 
@@ -190,16 +179,16 @@ screens = [
     Screen(
         top=bar.Bar(
             background=colors[16],
-            margin=[15, 15, 12, 15],
+            margin=[8, 8, 8, 8],
             size=25,
-            opacity=0.9,
+            opacity=0.8,
             widgets=[
                 widget.Sep(
                     background=colors[16],
                     linewidth=0,
                     padding=16
                 ),
-                widget.CurrentLayoutIcon(
+                widget.CurrentLayout(
                     custom_icon_paths=[os.path.expanduser(
                         "~/.config/qtile/icons")
                     ],
@@ -270,6 +259,12 @@ screens = [
                     background=colors[16],
                     foreground=colors[16],
                 ),
+                widget.Battery(
+                    padding=10,
+                    background=colors[14],
+                    foreground=colors[16],
+                    format = "{char} {percent:0.1%}"
+                ),
                 widget.Sep(
                     padding=10,
                     linewidth=2,
@@ -280,7 +275,7 @@ screens = [
                     foreground= colors[16],
                     icon_size= 17,
                     padding_y=-2,
-                    default_icon='/home/imperial/.config/qtile/icons/headphones.ico',
+                    default_icon='/home/abbey/.config/qtile/icons/volume.png',
                     progs=[('pavucontrol','pavucontrol')]
                 ),
                 widget.Volume(
@@ -299,7 +294,7 @@ screens = [
                     fontsize="14",
                     padding=10
                 ),
-                widget.CurrentLayoutIcon(
+                widget.CurrentLayout(
                     foreground = colors[16],
                     background=colors[14],
                     padding = 5,
@@ -327,147 +322,7 @@ screens = [
             ],
         ),
     ),
-    Screen(
-        top=bar.Bar(
-            background=colors[16],
-            margin=[15, 15, 12, 15],
-            size=25,
-            opacity=0.9,
-            widgets=[
-                widget.Sep(
-                    background=colors[16],
-                    linewidth=0,
-                    padding=16
-                ),
-                widget.CurrentLayoutIcon(
-                    custom_icon_paths=[os.path.expanduser(
-                        "~/.config/qtile/icons")
-                    ],
-                    foreground=colors[1],
-                    background=colors[14],
-                    padding=5,
-                    scale=0.7,
-                    rounded=True
-                ),
-                widget.Sep(
-                    background=colors[16],
-                    linewidth=0,
-                    padding=16
-                ),
-                widget.Sep(
-                    linewidth=4,
-                    padding=10,
-                    foreground=colors[5],
-                    background=colors[0]),
-                widget.GroupBox(
-                    font="iosevka bold",
-                    fontsize=10,
-                    margin_y=3,
-                    margin_x=2,
-                    padding_y=10,
-                    padding_x=5,
-                    borderwidth=4,
-                    active=colors[14],
-                    inactive=colors[18],
-                    rounded=False,
-                    highlight_color=colors[14],
-                    highlight_method="block",
-                    this_current_screen_border=colors[17],
-                    this_screen_border=colors[16],
-                    other_current_screen_border=colors[17],
-                    other_screen_border=colors[16],
-                    foreground=colors[18],
-                    background=colors[16],
-                ),
-                widget.Sep(
-                    linewidth=4,
-                    padding=10,
-                    foreground=colors[5],
-                    background=colors[0]
-                ),
-                widget.Sep(
-                linewidth=4,
-                padding=10,
-                foreground=colors[1],
-                background=colors[16]
-                ),
-                widget.Prompt(
-                    background=colors[3],
-                    foreground=colors[5],
-                    font="CaskaydiaCove Nerd Font Mono",
-                    fontsize=14,
-                ),
-                widget.WindowName(
-                    background=colors[16],
-                    foreground=colors[17],
-                    font="JetBrainsMono Nerd Font Mono",
-                    fontsize=14,
-                    padding=10
-                ),
-                widget.Sep(
-                    padding=10,
-                    linewidth=10,
-                    background=colors[16],
-                    foreground=colors[16],
-                ),
-                widget.Sep(
-                    padding=10,
-                    linewidth=2,
-                    background=colors[16]
-                ),
-                widget.LaunchBar(
-                    background= colors[14],
-                    foreground= colors[16],
-                    icon_size= 17,
-                    padding_y=-2,
-                    default_icon='/home/imperial/.config/qtile/icons/headphones.ico',
-                    progs=[('pavucontrol','pavucontrol')]
-                ),
-                widget.Volume(
-                    background=colors[14],
-                    foreground = colors[16],
-                ),
-                widget.Sep(
-                    padding=10,
-                    linewidth=2,
-                    background=colors[16]
-                ),
-                widget.CurrentLayout(
-                    background=colors[14],
-                    foreground = colors[16],
-                    font="CaskaydiaCove Nerd Font Mono",
-                    fontsize="14",
-                    padding=10
-                ),
-                widget.CurrentLayoutIcon(
-                    foreground = colors[16],
-                    background=colors[14],
-                    padding = 5,
-                    scale = 0.8
-                ),
-                widget.Sep(
-                    padding=10,
-                    linewidth=2,
-                    background=colors[16]
-                ),
-                widget.Clock(
-                    font="CaskaydiaCove Nerd Font Mono",
-                    foreground=colors[16],
-                    background=colors[14],
-                    fontsize=16,
-                    padding=10,
-                    format='%a  %d/%m | %I:%M %p',
-                ),
-                widget.Sep(
-                    padding=10,
-                    linewidth=0,
-                    background=colors[16],
-                    foreground=colors[16],
-                )
-            ],
-        ),
-    ),
-]
+    ]
 
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(),
